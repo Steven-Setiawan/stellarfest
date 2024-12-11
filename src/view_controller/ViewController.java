@@ -1,9 +1,16 @@
 package view_controller;
 
 import javafx.stage.Stage;
+import view.AdminHomeView;
 import view.AppView;
+import view.EventOrganizerCreateEventView;
+import view.EventOrganizerEventView;
+import view.EventOrganizerHomeView;
+import view.GuestHomeView;
 import view.LoginView;
+import view.ProfileView;
 import view.RegisterView;
+import view.VendorHomeView;
 import view.HomeView;
 import controller.UserController;
 
@@ -42,10 +49,6 @@ public class ViewController {
         this.stage.setTitle("Register Page");
         this.stage.show();
     }
-
-    public boolean registerUser(String username, String email, String password, String role) {
-        return userController.registerUser(username, email, password, role);
-    }
     
     public void navigateToHome() {
 		HomeView hv= new HomeView();
@@ -53,4 +56,55 @@ public class ViewController {
 		this.stage.setTitle("Home Page");
 		this.stage.show();
 	}
+    
+    public void navigateToGuestHome() {
+        GuestHomeView ghv = new GuestHomeView();
+        this.appView.setContent(ghv);
+        this.stage.setTitle("Guest Home Page");
+        this.stage.show();
+    }
+
+    public void navigateToAdminHome() {
+        AdminHomeView ahv = new AdminHomeView();
+        this.appView.setContent(ahv);
+        this.stage.setTitle("Admin Home Page");
+        this.stage.show();
+    }
+
+    public void navigateToEventOrganizerHome() {
+        EventOrganizerHomeView eohv = new EventOrganizerHomeView();
+        this.appView.setContent(eohv);
+        this.stage.setTitle("Event Organizer Home Page");
+        this.stage.show();
+    }
+
+    public void navigateToVendorHome() {
+        VendorHomeView vhv = new VendorHomeView();
+        this.appView.setContent(vhv);
+        this.stage.setTitle("Vendor Home Page");
+        this.stage.show();
+    }
+
+    public void navigateToProfile() {
+        ProfileView profileView = new ProfileView();
+        this.appView.setContent(profileView);
+        this.stage.setTitle("Profile View");
+        this.stage.show();
+    }
+
+    public void navigateToEventOrganizerCreateEvent() {
+        EventOrganizerCreateEventView createEventView = new EventOrganizerCreateEventView();
+        this.appView.setContent(createEventView);
+        this.stage.setTitle("Create Event");
+        this.stage.show();
+    }
+
+    public void navigateToEventOrganizerEvent() {
+        EventOrganizerEventView eventView = new EventOrganizerEventView();
+        this.appView.setContent(eventView);
+        this.stage.setTitle("Event Organizer Events");
+        this.stage.show();
+    }
+    
+    
 }

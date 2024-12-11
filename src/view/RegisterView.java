@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import controller.UserController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import view_controller.ViewController;
@@ -19,6 +20,7 @@ public class RegisterView extends VBox {
     private ComboBox<String> roleComboBox;
     private Button btn;
     private ViewController vc = ViewController.getInstance();
+    private UserController uc = new UserController();
 
     private void init() {
         container = new VBox();
@@ -62,7 +64,7 @@ public class RegisterView extends VBox {
             showAlert("Registration Failed", "Please fill in all fields.", AlertType.ERROR);
             return;
         }
-        boolean isRegistered = vc.registerUser(username, email, password, role);
+        boolean isRegistered = uc.registerUser(username, email, password, role);
 
         if (isRegistered) {
             showAlert("Registration Successful", "User has been registered successfully.", AlertType.INFORMATION);
