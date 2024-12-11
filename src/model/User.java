@@ -20,6 +20,26 @@ public class User {
 		return id;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setRole(int role) {
+		this.role = role;
+	}
+
 	public String getUsername() {
 		return username;
 	}

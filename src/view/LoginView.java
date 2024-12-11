@@ -2,6 +2,7 @@ package view;
 
 
 import controller.UserController;
+import database.Session;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -55,9 +56,22 @@ public class LoginView extends VBox {
 		String password = passwordPf.getText().toString();
 		
 		User user = uc.login(email, password);
-		if(user != null) {
-			vc.navigateToHome();
-		}
+		
+		Session.getInstance().setLoggedInUser(user);
+		
+	    if (user != null) {
+	        int roleId = user.getRole();
+	        
+	        if (roleId == 0) {
+	            vc.navigateToGuestHome();
+	        } else if (roleId == 1) {
+	            vc.navigateToAdminHome();
+	        } else if (roleId == 2) {
+	            vc.navigateToEventOrganizerHome();
+	        } else if (roleId == 3) {
+	            vc.navigateToVendorHome();
+	        }
+	    }
 	}
 
     public LoginView() {
