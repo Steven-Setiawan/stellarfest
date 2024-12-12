@@ -1,2 +1,8 @@
 /view/
+<<<<<<< HEAD
+=======
+/view_controller/
+/controller/
+/database/
+>>>>>>> 4f3f8248d93fe6caf8cb8afe1fee72a0c0f49d1b
 /model/

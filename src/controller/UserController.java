@@ -87,4 +87,25 @@ public class UserController {
 		return null;
 	}
     
+    public boolean updateUser(User user) {
+        String updateQuery = "UPDATE user SET Username = ?, Email = ?, Password = ? WHERE UserId = ?";
+
+        try (Connection connection = Database.getInstance().getConnection();
+             PreparedStatement ps = connection.prepareStatement(updateQuery)) {
+
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setInt(4, user.getId());
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+    
 }
