@@ -58,8 +58,6 @@ public class UserController {
 		}
 		
 		try {
-//			String query = String.format("SELECT * FROM user"
-//					+ "WHERE Email = '%s' AND Password = '%s'", email, password);
 			String query = "SELECT * FROM user WHERE email = ? AND password = ?";
 			PreparedStatement ps = Database.getInstance().preparedStatment(query);
 			ps.setString(1, email);

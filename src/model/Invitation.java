@@ -40,7 +40,4 @@ public class Invitation {
 		this.invitationStatus = invitationStatus;
 	}
 	
-	
-	
-
 }

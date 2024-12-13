@@ -1,44 +1,58 @@
 package view;
 
-import java.util.Vector;
-
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import model.Event;
+import view_controller.ViewController;
 
-public class GuestHomeView extends HBox{
+public class GuestHomeView extends BorderPane implements EventHandler<ActionEvent>{
 
-	private VBox leftVbox, rightVbox;
-	private TableView<Event> eventTable;
-	private Vector<Event> events;
-	private Label filterLbl, activeLbl;
-	private int id;
-	
+	private HBox navContainer;
+	private Button invitationBtn, profileBtn, logoutBtn;
+	private ViewController vc;
 	
 	private void init() {
-		events = new Vector<Event>();
+		vc = ViewController.getInstance();
+		navContainer = new HBox(10);
+		invitationBtn = new Button("Invitation");
+		profileBtn = new Button("Profile");
+		logoutBtn = new Button("Logout");
 		
-		leftVbox = new VBox();
-		rightVbox = new VBox();
-		eventTable = new TableView<Event>();
-		filterLbl = new Label();
-		activeLbl = new Label();
+		this.invitationBtn.setOnAction(this);
+		this.logoutBtn.setOnAction(this);
+		this.profileBtn.setOnAction(this);
 	}
 	
 	private void setLayout() {
-		this.leftVbox.getChildren().addAll(filterLbl);
-		this.rightVbox.getChildren().addAll(activeLbl, eventTable);
-		this.getChildren().addAll(leftVbox, rightVbox);
+		this.navContainer.getChildren().addAll(invitationBtn, profileBtn, logoutBtn);
+		this.setTop(navContainer);
+		this.navContainer.setAlignment(Pos.TOP_LEFT);
 	}
 	
-	private void setTable() {
-		
-	}
-	
-	public GuestHomeView() {
-		
+	private void setStyle() {
+		this.navContainer.setStyle("-fx-background-color: #333; -fx-padding: 10px;");
+		this.invitationBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+		this.profileBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+		this.logoutBtn.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
 	}
 
+	@Override
+	public void handle(ActionEvent e) {
+		if(e.getSource() == this.logoutBtn) {
+			vc.navigateToLogin();
+		}else if(e.getSource() == this.invitationBtn) {
+			vc.navigateToGuestInvitationPage();
+		}else if(e.getSource() == this.profileBtn) {
+			vc.navigateToProfile();
+		}
+	}	
+	
+	public GuestHomeView() {
+		init();
+		setLayout();
+		setStyle();
+	}
 }
