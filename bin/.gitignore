@@ -1,5 +1,6 @@
-/view/
-/view_controller/
+/module-info.class
 /controller/
+/view/
 /database/
 /model/
+/view_controller/

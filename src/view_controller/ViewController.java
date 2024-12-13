@@ -1,5 +1,6 @@
 package view_controller;
 
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import view.AdminHomeView;
 import view.AppView;
@@ -12,16 +13,17 @@ import view.ProfileView;
 import view.RegisterView;
 import view.VendorHomeView;
 import view.HomeView;
-import controller.UserController;
+
+import java.util.Stack;
 
 public class ViewController {
     private Stage stage;
     private AppView appView;
+    private Stack<Region> viewStack;
     private static ViewController instance;
-    private UserController userController;
 
     private ViewController() {
-        userController = new UserController();
+    	
     }
 
     public static ViewController getInstance() {
@@ -34,6 +36,22 @@ public class ViewController {
     public void initialize(Stage stage, AppView appView) {
         this.stage = stage;
         this.appView = appView;
+        this.viewStack = new Stack<>();
+    }
+    
+    public void navigateBack() {
+        if (!viewStack.isEmpty()) {
+            viewStack.pop();
+            appView.setContent(viewStack.peek());
+            stage.show();
+        }
+    }
+    
+    public void navigateToView(Region view, String title) {
+    	this.appView.setContent(view);
+    	this.stage.setTitle(title);
+    	this.viewStack.add(view);
+    	this.stage.show();
     }
 
     public void navigateToLogin() {
