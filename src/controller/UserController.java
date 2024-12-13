@@ -28,23 +28,23 @@ public class UserController {
     //////////////////////////////Login User Start Here//////////////////////////////
     
     public User login(String email, String password) {
-        if (email.isEmpty() || password.isEmpty()) {
-            Alert a = new Alert(AlertType.ERROR);
-            a.setHeaderText("Fill all the required Credentials");
-            a.show();
-            return null;
-        }
-
-        User user = userDataAccess.login(email, password);
+		
+		if (email.isEmpty() || password.isEmpty()) {
+			Alert a = new Alert(AlertType.ERROR);
+			a.setHeaderText("Fill all the required Credentials");
+			a.show();
+			return null;
+		}
+		
+		User user = userDataAccess.login(email, password);
 
         if (user == null) {
             Alert a = new Alert(AlertType.ERROR);
             a.setHeaderText("Wrong Credentials");
             a.show();
         }
-
         return user;
-    }
+	}
     
     //////////////////////////////Update Profile User Start Here//////////////////////////////
 

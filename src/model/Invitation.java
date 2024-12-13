@@ -39,5 +39,4 @@ public class Invitation {
 	public void setInvitationStatus(String invitationStatus) {
 		this.invitationStatus = invitationStatus;
 	}
-	
 }

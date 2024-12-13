@@ -4,58 +4,49 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Event {
+	private int eventId;
+	private String eventName;
+	private String eventDate;
+	private String eventLocation;
+	private String organizerId;
+	private String eventDescription;
+	
+	public Event(int eventId, String eventName, String eventDate, String eventLocation) {
+		this.eventId = eventId;
+		this.eventName = eventName;
+		this.eventDate = eventDate;
+		this.eventLocation = eventLocation;
+	}
+	
+	public Event(int eventId, String eventName, String eventDate, String eventLocation, String eventDescription) {
+		this.eventId = eventId;
+		this.eventName = eventName;
+		this.eventDate = eventDate;
+		this.eventLocation = eventLocation;
+		this.eventDescription = eventDescription;
+	}
 
-    private int eventId;
-    private StringProperty eventName;
-    private StringProperty eventDate;
-    private StringProperty eventLocation;
-    private StringProperty eventDescription;
+	public int getEventId() {
+		return eventId;
+	}
 
-    public Event(int eventId, String eventName, String eventDate, String eventLocation, String eventDescription) {
-        this.eventId = eventId;
-        this.eventName = new SimpleStringProperty(eventName);
-        this.eventDate = new SimpleStringProperty(eventDate);
-        this.eventLocation = new SimpleStringProperty(eventLocation);
-        this.eventDescription = new SimpleStringProperty(eventDescription);
-    }
+	public String getEventName() {
+		return eventName;
+	}
 
-    public int getEventId() {
-        return eventId;
-    }
+	public String getEventDate() {
+		return eventDate;
+	}
 
-    public StringProperty eventNameProperty() {
-        return eventName;
-    }
+	public String getEventLocation() {
+		return eventLocation;
+	}
 
-    public String getEventName() {
-        return eventName.get();
-    }
+	public String getOrganizerId() {
+		return organizerId;
+	}
 
-    public void setEventName(String eventName) {
-        this.eventName.set(eventName);
-    }
-
-    public StringProperty eventDateProperty() {
-        return eventDate;
-    }
-
-    public String getEventDate() {
-        return eventDate.get();
-    }
-
-    public StringProperty eventLocationProperty() {
-        return eventLocation;
-    }
-
-    public String getEventLocation() {
-        return eventLocation.get();
-    }
-
-    public StringProperty eventDescriptionProperty() {
-        return eventDescription;
-    }
-
-    public String getEventDescription() {
-        return eventDescription.get();
-    }
+	public String getEventDescription() {
+		return eventDescription;
+	}
 }

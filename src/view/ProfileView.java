@@ -5,21 +5,25 @@ import database.Session;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.User;
 import view_controller.ViewController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-public class ProfileView extends VBox {
+public class ProfileView extends BorderPane {
 
+	private HBox navContainer;
+	private VBox container;
     private Label usernameLabel;
     private Label emailLabel;
     private Label passwordLabel;
     private TextField usernameField;
     private TextField emailField;
     private TextField passwordField;
-    private Button submitButton;
+    private Button submitButton, backBtn;
 
     private UserController userController = new UserController();
     private ViewController vc = ViewController.getInstance();
@@ -28,11 +32,15 @@ public class ProfileView extends VBox {
         init();
         setEventHandlers();
         setLayout();
+        setStyle();
     }
 
     private void init() {
         User loggedInUser = Session.getInstance().getLoggedInUser();
 
+        navContainer = new HBox(10);
+        container = new VBox();
+        
         usernameLabel = new Label("Username:");
         emailLabel = new Label("Email:");
         passwordLabel = new Label("Password:");
@@ -42,19 +50,33 @@ public class ProfileView extends VBox {
         passwordField = new TextField(loggedInUser.getPassword());
 
         submitButton = new Button("Submit");
+        backBtn = new Button("Back");
     }
 
     private void setEventHandlers() {
-        submitButton.setOnAction(event -> handleSubmit());
+        this.submitButton.setOnAction(event -> handleSubmit());
+        this.backBtn.setOnAction(event -> {
+        	vc.navigateBack();
+        });
     }
+    
+	private void setStyle() {
+		this.navContainer.setStyle("-fx-background-color: #333; -fx-padding: 10px;");
+		this.backBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+	}
 
     private void setLayout() {
-        this.getChildren().addAll(
+        this.container.getChildren().addAll(
             usernameLabel, usernameField,
             emailLabel, emailField,
             passwordLabel, passwordField,
             submitButton
         );
+        
+        this.navContainer.getChildren().addAll(backBtn);
+        
+        this.setTop(navContainer);
+        this.setLeft(container);
     }
 
     private void handleSubmit() {
