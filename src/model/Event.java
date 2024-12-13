@@ -1,5 +1,7 @@
 package model;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class Event {
 	private int eventId;
@@ -47,6 +49,4 @@ public class Event {
 	public String getEventDescription() {
 		return eventDescription;
 	}
-	
-	
 }
