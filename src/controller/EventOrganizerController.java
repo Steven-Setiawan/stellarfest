@@ -2,7 +2,14 @@ package controller;
 
 import database.EventDataAccess;
 import model.Event;
+import model.Guest;
 import model.User;
+import model.Vendor;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventOrganizerController {
@@ -11,6 +18,26 @@ public class EventOrganizerController {
 
     public EventOrganizerController() {
         eventDataAccess = new EventDataAccess();
+    }
+    
+    public List<User> getGuestByTransactionId(int eventId){
+		return eventDataAccess.getGuestByTransactionId(eventId);
+	}
+	
+	public List<User> getVendorByTransactionId(int eventId){
+		return eventDataAccess.getVendorByTransactionId(eventId);
+	}
+    
+    public Event viewEventDetails(int eventId) {
+		return eventDataAccess.viewEventDetails(eventId);
+	}
+    
+    public List<User> getGuests(int eventId){
+    	return eventDataAccess.getGuests(eventId);
+    }
+    
+    public List<User> getVendors(int eventId){
+    	return eventDataAccess.getVendors(eventId);
     }
     
     //////////////////////////////Event Organizer Create Event Start Here//////////////////////////////

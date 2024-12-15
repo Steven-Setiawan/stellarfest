@@ -19,10 +19,10 @@ public class ProfileView extends BorderPane {
 	private VBox container;
     private Label usernameLabel;
     private Label emailLabel;
-    private Label passwordLabel;
+    private Label oldPasswordLabel, newPasswordLbl;
     private TextField usernameField;
     private TextField emailField;
-    private TextField passwordField;
+    private TextField oldPasswordField, newPasswordField;
     private Button submitButton, backBtn;
 
     private UserController userController = new UserController();
@@ -43,11 +43,13 @@ public class ProfileView extends BorderPane {
         
         usernameLabel = new Label("Username:");
         emailLabel = new Label("Email:");
-        passwordLabel = new Label("Password:");
+        oldPasswordLabel = new Label("Old Password:");
+        newPasswordLbl = new Label("New Password:");
 
         usernameField = new TextField(loggedInUser.getUsername());
         emailField = new TextField(loggedInUser.getEmail());
-        passwordField = new TextField(loggedInUser.getPassword());
+        oldPasswordField = new TextField();
+        newPasswordField = new TextField();
 
         submitButton = new Button("Submit");
         backBtn = new Button("Back");
@@ -69,7 +71,8 @@ public class ProfileView extends BorderPane {
         this.container.getChildren().addAll(
             usernameLabel, usernameField,
             emailLabel, emailField,
-            passwordLabel, passwordField,
+            oldPasswordLabel, oldPasswordField,
+            newPasswordLbl, newPasswordField,
             submitButton
         );
         
@@ -82,32 +85,17 @@ public class ProfileView extends BorderPane {
     private void handleSubmit() {
         String newUsername = usernameField.getText().trim();
         String newEmail = emailField.getText().trim();
-        String newPassword = passwordField.getText().trim();
+        String oldPassword = oldPasswordField.getText().trim();
+        String newPassword = newPasswordField.getText().trim();
 
-        if (newUsername.isEmpty() || newEmail.isEmpty() || newPassword.isEmpty()) {
-            showAlert(AlertType.ERROR, "All fields are required.");
-            return;
-        }
-
-        User loggedInUser = Session.getInstance().getLoggedInUser();
-        loggedInUser.setUsername(newUsername);
-        loggedInUser.setEmail(newEmail);
-        loggedInUser.setPassword(newPassword);
-
-        boolean success = userController.updateUser(loggedInUser);
-
-        if (success) {
-            Session.getInstance().setLoggedInUser(loggedInUser);
-
-            showAlert(AlertType.INFORMATION, "Profile updated successfully.");
-            if(loggedInUser.getRole()==1) {
-            	vc.navigateToGuestHome();
-            }else if(loggedInUser.getRole()==2) {
-            	vc.navigateToEventOrganizerHome();
+        if(userController.checkChangeProfileInput(newUsername, newEmail, oldPassword, newPassword)) {
+        	if (userController.changeProfile(newEmail, newUsername, oldPassword, newPassword)) {
+                showAlert(AlertType.INFORMATION, "Profile updated successfully.");
+                vc.navigateToProfile();
+            } else {
+                showAlert(AlertType.ERROR, "Failed to update profile. Please try again.");
             }
-        } else {
-            showAlert(AlertType.ERROR, "Failed to update profile. Please try again.");
-        }
+        }   
     }
 
     private void showAlert(AlertType alertType, String message) {

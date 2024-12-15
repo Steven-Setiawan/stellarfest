@@ -5,7 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import model.Event;
+import model.Guest;
 import model.User;
+import model.Vendor;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +16,52 @@ import java.util.List;
 public class EventDataAccess {
 	
 	private Database db = Database.getInstance();
+	
+	public List<User> getGuestByTransactionId(int eventId){
+		List<User> guestList = new ArrayList<User>();
+		String query = "SELECT u.UserId, Username, Email FROM user u "
+					+ "JOIN invitation i ON u.UserId = i.UserId "
+					+ "WHERE u.RoleId = 0 AND i.EventId = ?";
+		
+		PreparedStatement ps = db.preparedStatment(query);
+		try {
+			ps.setInt(1, eventId);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				User user = new Guest(rs.getInt("UserId"), rs.getString("Username"), rs.getString("Email"));
+				
+				guestList.add(user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return guestList;
+	}
+	
+	public List<User> getVendorByTransactionId(int eventId){
+		List<User> vendorList = new ArrayList<User>();
+		
+		String query = "SELECT u.UserId, Username, Email FROM user u "
+				+ "JOIN invitation i ON u.UserId = i.UserId "
+				+ "WHERE u.RoleId = 3 AND i.EventId = ?";
+	
+		PreparedStatement ps = db.preparedStatment(query);
+	
+		try {
+			ps.setInt(1, eventId);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				User user = new Vendor(rs.getInt("UserId"), rs.getString("Username"), rs.getString("Email"));
+				
+				vendorList.add(user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return vendorList;
+	}
 	
 	public Event viewEventDetails(int eventId) {
 		String query = "SELECT * FROM eventdetails WHERE EventId = ?";
@@ -100,6 +149,59 @@ public class EventDataAccess {
     
     
     //////Ambil User List Buat Invite//////
+    
+    public List<User> getGuests(int eventId){
+    	List<User> guests = new ArrayList<User>();
+    	String query = "SELECT u.UserId, u.Username, u.Email "
+    			+ "FROM stellarfest.user u "
+    			+ "JOIN stellarfest.role r ON u.RoleId = r.RoleId "
+    			+ "WHERE r.RoleId = 0 "
+    			+ "AND u.UserId NOT IN "
+    			+ "(SELECT i.UserId "
+    			+ "FROM stellarfest.invitation i "
+    			+ "WHERE i.EventId = ?)";
+    	
+    	PreparedStatement ps = db.preparedStatment(query);
+    	
+    	try {
+			ps.setInt(1, eventId);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				User user = new User(rs.getInt("UserId"), rs.getString("Username"), rs.getString("Email"));
+				guests.add(user); 
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	
+    	return guests;
+    }
+    
+    public List<User> getVendors(int eventId){
+    	List<User> vendors = new ArrayList<User>();
+    	String query = "SELECT u.UserId, u.Username, u.Email "
+		    			+ "FROM stellarfest.user u "
+		    			+ "JOIN stellarfest.role r ON u.RoleId = r.RoleId "
+		    			+ "WHERE r.RoleId = 3 "
+		    			+ "AND u.UserId NOT IN "
+		    			+ "(SELECT i.UserId "
+		    			+ "FROM stellarfest.invitation i "
+		    			+ "WHERE i.EventId = ?)";
+    	PreparedStatement ps = db.preparedStatment(query);
+    	
+    	try {
+			ps.setInt(1, eventId);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				User user = new User(rs.getInt("UserId"), rs.getString("Username"), rs.getString("Email"));
+				vendors.add(user); 
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	
+    	return vendors;
+    }
     
     public List<User> getUsersWithRoles(int... roles) {   ///Parameter int... diisi 0,3 dari loadUsers di EventOrganizerCreateEventView => Invite cuman bisa Guest & Vendor ////
         List<User> users = new ArrayList<>();

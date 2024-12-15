@@ -3,11 +3,11 @@ package view;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableView;
@@ -31,19 +31,24 @@ public class EventOrganizerCreateEventView extends VBox {
     private TextField eventNameTf, eventLocationTf, eventDescriptionTf;
     private DatePicker eventDateDp;
     private Button submitButton;
-    private EventOrganizerController eventOrganizerController;
+    private EventOrganizerController ec;
     private ViewController vc = ViewController.getInstance();
-
     private TableView<User> userTable;
-    private ObservableList<User> usersList;
-    private List<User> invitedUsers;
+    private List<User> invitedUsers, usersList;
+    private EONavbar navBar;
 
-    private HBox navBar;
-    private Button homeButton, profileButton, eventButton, logoutButton;
 
     public EventOrganizerCreateEventView() {
+    	init();
+    	setLayout();
+    	setStyle();
+    	setTable();
+    	loadUsers();
+    }
+    
+    private void init() {
+    	this.navBar = new EONavbar();
         createEventLabel = new Label("Create Event");
-        createEventLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 10px;");
 
         eventNameTf = new TextField();
         eventLocationTf = new TextField();
@@ -51,76 +56,31 @@ public class EventOrganizerCreateEventView extends VBox {
         eventDateDp = new DatePicker();
         eventDateDp.setPromptText("Event Date");
 
-        eventNameTf.setPromptText("Event Name");
+        eventNameTf.setPromptText("Event Name");	
         eventLocationTf.setPromptText("Event Location");
         eventDescriptionTf.setPromptText("Event Description");
 
         submitButton = new Button("Create Event");
-        submitButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px;");
 
-        eventOrganizerController = new EventOrganizerController();
-
-        invitedUsers = new ArrayList<>();
-        usersList = FXCollections.observableArrayList();
-
-        userTable = new TableView<>();
-        setUpUserTable();
-
-        setUpNavBar();
+        ec = new EventOrganizerController();
+        
+        userTable = new TableView<User>();
+        invitedUsers = new ArrayList<User>();
+        usersList = new ArrayList<User>();
         
         submitButton.setOnAction(e -> 
         	handleSubmit());
-
+    }
+    
+    private void setLayout() {
         this.getChildren().addAll(navBar, createEventLabel, createForm(), userTable, submitButton);
         this.setSpacing(15);
     }
     
-    /////////////////////////NavBAr/////////////////////////
-    
-    private void setUpNavBar() {
-        navBar = new HBox(10);
-        navBar.setStyle("-fx-background-color: #333; -fx-padding: 10px;");
-        homeButton = new Button("Home");
-        profileButton = new Button("Profile");
-        eventButton = new Button("Event");
-        logoutButton = new Button("Logout");
-
-        homeButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-        profileButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-        eventButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-        logoutButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
-
-        homeButton.setOnAction(e -> navigate("home"));
-        profileButton.setOnAction(e -> navigate("profile"));
-        eventButton.setOnAction(e -> navigate("event"));
-        logoutButton.setOnAction(e -> navigate("logout"));
-
-        navBar.getChildren().addAll(homeButton, profileButton, eventButton, logoutButton);
+    private void setStyle() {
+        submitButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px;");
+        createEventLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 10px;");
     }
-
-    private void navigate(String navigationType) {
-        switch (navigationType) {
-            case "home":
-            	vc.navigateToEventOrganizerHome();
-                System.out.println("Navigating to Home");
-                break;
-            case "profile":
-            	vc.navigateToProfile();
-                System.out.println("Navigating to Profile");
-                break;
-            case "event":
-            	vc.navigateToEventOrganizerEvent();
-                System.out.println("Navigating to Event");
-                break;
-            case "logout":
-                vc.navigateToLogin();
-                System.out.println("Logging out...");
-                break;
-            default:
-                System.out.println("Unknown navigation type: " + navigationType);
-        }
-    }
-    
     
     /////////////////////////Form/////////////////////////
 
@@ -142,65 +102,66 @@ public class EventOrganizerCreateEventView extends VBox {
         return form;
     }
 
-    private void setUpUserTable() {
-        TableColumn<User, Integer> rowNumberColumn = new TableColumn<>("No.");
-        rowNumberColumn.setCellValueFactory(param -> 
-            new javafx.beans.value.ObservableValueBase<Integer>() {
-                @Override
-                public Integer getValue() {
-                    return userTable.getItems().indexOf(param.getValue()) + 1;
-                }
-            });
-
+    private void setTable() {
         TableColumn<User, String> usernameColumn = new TableColumn<>("Username");
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
 
         TableColumn<User, String> emailColumn = new TableColumn<>("Email");
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
 
+        TableColumn<User, String> roleColumn = new TableColumn<>("Role");
+        roleColumn.setCellValueFactory(new PropertyValueFactory<>("roleName"));
+        
         TableColumn<User, Void> inviteColumn = new TableColumn<>("Invite");
 
         inviteColumn.setCellFactory(new Callback<TableColumn<User, Void>, TableCell<User, Void>>() {
             @Override
             public TableCell<User, Void> call(TableColumn<User, Void> param) {
                 return new TableCell<User, Void>() {
-                    private final Button inviteButton = new Button("Invite");
+                	private final CheckBox inviteCheckBox = new CheckBox();
 
                     {
-                        inviteButton.setOnAction(event -> {
-                            User user = getTableView().getItems().get(getIndex()); 
-                            if (!invitedUsers.contains(user)) {         ///validasi user udah diinvite belom
-                                invitedUsers.add(user);
-                                System.out.println("User invited: " + user.getUsername());
+                        inviteCheckBox.setOnAction(event -> {
+                            User user = getTableView().getItems().get(getIndex());
+                            if (inviteCheckBox.isSelected()) {
+                                if (!invitedUsers.contains(user)) {
+                                	invitedUsers.add(user);
+                                }
+                            } else {
+                                invitedUsers.remove(user);
                             }
                         });
                     }
 
                     @Override
-                    public void updateItem(Void item, boolean empty) {  ///Selama row ada data, tambah tombol invite
+                    public void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            setGraphic(inviteButton);
+                            User user = getTableView().getItems().get(getIndex());
+                            inviteCheckBox.setSelected(invitedUsers.contains(user));
+                            setGraphic(inviteCheckBox);
                         }
                     }
+                	
                 };
             }
         });
 
-        userTable.getColumns().addAll(rowNumberColumn, usernameColumn, emailColumn, inviteColumn);
-        userTable.setItems(usersList);
-        loadUsers();
+        userTable.getColumns().addAll(usernameColumn, emailColumn, roleColumn, inviteColumn);
+        
     }
     
     
     //////Isi data Table//////
 
     private void loadUsers() {
-        List<User> users = eventOrganizerController.getUsersWithRole(0, 3); 
+        List<User> users = ec.getUsersWithRole(0, 3); 
         usersList.clear();
         usersList.addAll(users);
+        ObservableList<User> listUser = FXCollections.observableArrayList(this.usersList);
+        this.userTable.setItems(listUser);
     }
 
     private void handleSubmit() {
@@ -234,10 +195,10 @@ public class EventOrganizerCreateEventView extends VBox {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedEventDate = eventDate.format(formatter);
 
-        int eventId = eventOrganizerController.createEvent(eventName, formattedEventDate, eventLocation, eventDescription, currentUser.getId());
+        int eventId = ec.createEvent(eventName, formattedEventDate, eventLocation, eventDescription, currentUser.getId());
         if (eventId > 0) {
             for (User invitedUser : invitedUsers) {
-                eventOrganizerController.createInvitation(eventId, invitedUser, "Pending");
+                ec.createInvitation(eventId, invitedUser, "Pending");
             }
 
             Alert alert = new Alert(AlertType.INFORMATION);

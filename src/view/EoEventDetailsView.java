@@ -1,36 +1,50 @@
 package view;
 
-import controller.EventController;
-import javafx.geometry.Insets;
+import java.util.ArrayList;
+import java.util.List;
+
+import controller.AdminController;
+import controller.EventOrganizerController;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Event;
+import model.User;
 import view_controller.ViewController;
 
-public class EventDetailsPage extends BorderPane{
-	
-	private int eventId;
+public class EoEventDetailsView extends BorderPane{
+
 	private VBox wrapper;
-	private EventController ec;
 	private GridPane container;
 	private Label eventNameLbl, eventDateLbl, eventLocationLbl, eventDescriptionLbl;
 	private TextArea eventNameField, eventDateField, eventLocationField, eventDescriptionField;
 	private HBox navContainer;
 	private Button backBtn;
+	private TableView<User> userTable;
+	private List<User> users;
+	private EventOrganizerController ec;
+	private int eventId;
 	
 	private void init() {
 		// init all components that we gonna use
 		container = new GridPane();
-		wrapper = new VBox(10);
+		wrapper = new VBox(20);
 		container.setVgap(10);
 		container.setHgap(10);
-		navContainer = new HBox(20);
+		navContainer = new HBox(10);
+		userTable = new TableView<User>();
+		users = new ArrayList<User>();
+		ec = new EventOrganizerController();
 		
 		backBtn = new Button("Back");
 		
@@ -63,7 +77,6 @@ public class EventDetailsPage extends BorderPane{
 	    
 	    eventDescriptionField.setWrapText(true);
 
-
 		backBtn.setOnAction(event -> {
 			ViewController.getInstance().navigateBack();
 		});
@@ -84,7 +97,7 @@ public class EventDetailsPage extends BorderPane{
 		container.add(eventDescriptionLbl, 0, 3); // Row 3, Column 0
 		container.add(eventDescriptionField, 1, 3); // Row 3, Column 1
 		
-		this.wrapper.getChildren().addAll(navContainer, container);
+		this.wrapper.getChildren().addAll(navContainer, container, userTable);
 		this.setTop(wrapper);
 	}
 	
@@ -93,7 +106,29 @@ public class EventDetailsPage extends BorderPane{
 		this.backBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
 	}
 	
-	private void loadData() {
+	private void setTable() {
+		TableColumn<User, String> usernameColumn = new TableColumn<User, String>("Username");
+		usernameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
+		
+		TableColumn<User, String> emailColumn = new TableColumn<User, String>("Email");
+		emailColumn.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
+		
+		TableColumn<User, String> roleColumn = new TableColumn<User, String>("Role");
+		roleColumn.setCellValueFactory(new PropertyValueFactory<User, String>("roleName"));
+		
+		this.userTable.getColumns().addAll(usernameColumn, emailColumn, roleColumn);
+	}
+	
+	private void loadTableData() {
+		ObservableList<User> userList;
+		this.users.clear();
+		this.users.addAll(ec.getGuestByTransactionId(eventId));
+		this.users.addAll(ec.getVendorByTransactionId(eventId));
+		userList = FXCollections.observableArrayList(this.users);
+		this.userTable.setItems(userList);
+	}
+	
+	private void loadEventDesc() {
 		Event event = ec.viewEventDetails(eventId);
 		eventNameField.setText(event.getEventName());
 		eventDateField.setText(event.getEventDate());
@@ -101,14 +136,14 @@ public class EventDetailsPage extends BorderPane{
 		eventDescriptionField.setText(event.getEventDescription());
 	}
 	
-	public EventDetailsPage(int eventId) {
+	public EoEventDetailsView(int eventId) {
 		this.eventId = eventId;
-		ec = new EventController();
-		
 		init();
 		setLayout();
-		loadData();
 		setStyle();
+		setTable();
+		loadTableData();
+		loadEventDesc();
 	}
 
 }

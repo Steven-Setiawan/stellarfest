@@ -60,17 +60,13 @@ public class RegisterView extends VBox {
         String password = passwordPf.getText();
         String role = roleComboBox.getValue();
 
-        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            showAlert("Registration Failed", "Please fill in all fields.", AlertType.ERROR);
-            return;
-        }
-        boolean isRegistered = uc.registerUser(username, email, password, role);
-
-        if (isRegistered) {
-            showAlert("Registration Successful", "User has been registered successfully.", AlertType.INFORMATION);
-            clearFields();
-        } else {
-            showAlert("Registration Failed", "An error occurred during registration. Please try again.", AlertType.ERROR);
+        if (uc.checkRegisterInput(username, email, password)) {
+        	if (uc.register(username, email, password, role)) {
+                showAlert("Registration Successful", "User has been registered successfully.", AlertType.INFORMATION);
+                vc.navigateToLogin();
+            } else {
+                showAlert("Registration Failed", "An error occurred during registration. Please try again.", AlertType.ERROR);
+            }
         }
     }
 
@@ -80,12 +76,5 @@ public class RegisterView extends VBox {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    private void clearFields() {
-        usernameTf.clear();
-        emailTf.clear();
-        passwordPf.clear();
-        roleComboBox.setValue("Guest");
     }
 }

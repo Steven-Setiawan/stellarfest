@@ -3,10 +3,12 @@ package view;
 
 import controller.UserController;
 import database.Session;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import model.User;
@@ -52,24 +54,18 @@ public class LoginView extends VBox {
     }
     
     private void handleLogin() {
-		String email = emailTf.getText().toString();
-		String password = passwordPf.getText().toString();
+		String email = emailTf.getText().trim();
+		String password = passwordPf.getText().trim();
 		
-		User user = uc.login(email, password);
-		
-		Session.getInstance().setLoggedInUser(user);
-		
-	    if (user != null) {
-	        int roleId = user.getRole();
-	        
-	        if (roleId == 0) {
-	            vc.navigateToGuestHome();
-	        } else if (roleId == 1) {
-	            vc.navigateToAdminHome();
-	        } else if (roleId == 2) {
-	            vc.navigateToEventOrganizerHome();
-	        } else if (roleId == 3) {
-	            vc.navigateToVendorHome();
+	    if (uc.checkLoginInput(email, password)) {
+	        if(uc.login(email, password)) {
+	        	vc.navigateToHomeBasedOnRole(Session.getInstance().getLoggedInUser().getRole());
+	        }else {
+	        	Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("Failed");
+		        alert.setHeaderText(null);
+		        alert.setContentText("Wrong Credentials");
+		        alert.showAndWait();
 	        }
 	    }
 	}

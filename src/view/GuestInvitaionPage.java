@@ -136,7 +136,7 @@ public class GuestInvitaionPage extends BorderPane implements EventHandler<Actio
 	
 	private void setTableData(String status) {
 		this.events.clear();
-		this.events = gc.getInvitations(activeUser.getId(), status);
+		this.events = gc.getInvitations(activeUser.getEmail(), status);
 		ObservableList<Event> inivitationList = FXCollections.observableArrayList(this.events);
 		this.eventTable.setItems(inivitationList);
 	}

@@ -24,7 +24,13 @@ public class User {
         this.password = "";
     }
 
-    public int getId() {
+    public User(int id, String username, String email) {
+		this.id = id;
+		this.username = username;
+		this.email = email;
+	}
+
+	public int getId() {
         return id;
     }
 
@@ -58,6 +64,17 @@ public class User {
 
     public int getRole() {
         return role;
+    }
+    
+    public String getRoleName() {
+    	if(this.role == 0) {
+    		return "Guest";
+    	}else if(this.role == 1) {
+    		return "Admin";
+    	}else if(this.role == 2) {
+    		return "Event Organizer";
+    	}
+    	return "Vendor";
     }
 
     public void setRole(int role) {

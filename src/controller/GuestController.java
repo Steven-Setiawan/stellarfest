@@ -13,8 +13,8 @@ public class GuestController {
 		da = new GuestDataAccess();
 	}
 	
-	public List<Event> getInvitations(int id, String status){
-		return da.getInvitations(id, status);
+	public List<Event> getInvitations(String email, String status){
+		return da.getInvitations(email, status);
 	}
 	
 	public boolean acceptInvitation(int eventId) {

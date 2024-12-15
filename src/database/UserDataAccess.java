@@ -7,9 +7,45 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDataAccess {
+	Database db = Database.getInstance();
+	
+	public boolean getUserByEmail(String email) {
+    	String query = "SELECT * FROM user WHERE Email = ?";
+    	PreparedStatement ps = db.preparedStatment(query);
+		
+    	try {
+			ps.setString(1, email);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	return false;
+    }
+    
+    public boolean getUserByUsername(String username) {
+    	String query = "SELECT * FROM user WHERE Username = ?";
+    	PreparedStatement ps = db.preparedStatment(query);
+		
+    	try {
+			ps.setString(1, username);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	return false;
+    }
 
-    public boolean registerUser(String username, String email, String password, String role) {
-        int roleId = getRoleId(role);
+    public boolean register(String username, String email, String password, int roleId) {
 
         try (Connection connection = Database.getInstance().getConnection()) {
             String sql = "INSERT INTO user (Username, Email, Password, RoleId) VALUES (?, ?, ?, ?)";
@@ -30,7 +66,7 @@ public class UserDataAccess {
         }
     }
 
-    public User login(String email, String password) {
+    public boolean login(String email, String password) {
         String query = "SELECT * FROM user WHERE email = ? AND password = ?";
 
         try (Connection connection = Database.getInstance().getConnection();
@@ -44,48 +80,39 @@ public class UserDataAccess {
                 String username = rs.getString("Username");
                 int id = rs.getInt("UserId");
                 int roleId = rs.getInt("RoleId");
-                return new User(id, username, email, password, roleId);
+                User user = new User(id, username, email, password, roleId);
+                Session.getInstance().setLoggedInUser(user);
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return null;
+        return false;
     }
 
-    public boolean updateUser(User user) {
+    public boolean changeProfile(String email, String username, String oldPassword, String newPassword) {
         String updateQuery = "UPDATE user SET Username = ?, Email = ?, Password = ? WHERE UserId = ?";
-
+        int userId = Session.getInstance().getLoggedInUser().getId();
+        User user = new User(userId, username, email, newPassword, Session.getInstance().getLoggedInUser().getRole());
+        
         try (Connection connection = Database.getInstance().getConnection();
              PreparedStatement ps = connection.prepareStatement(updateQuery)) {
 
-            ps.setString(1, user.getUsername());
-            ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPassword());
-            ps.setInt(4, user.getId());
+            ps.setString(1, username);
+            ps.setString(2, email);
+            ps.setString(3, newPassword);
+            ps.setInt(4, userId);
 
             int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0;
+            if(rowsAffected > 0) {
+            	Session.getInstance().setLoggedInUser(user);
+            	return true;
+            };
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return false;
-    }
-
-    private int getRoleId(String role) {
-        switch (role.toLowerCase()) {
-            case "admin":
-                return 1;
-            case "guest":
-                return 0;
-            case "vendor":
-                return 3;
-            case "event organizer":
-                return 2;
-            default:
-                return 0;
-        }
     }
 }

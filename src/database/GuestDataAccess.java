@@ -12,17 +12,18 @@ public class GuestDataAccess {
 
 	private Database db = Database.getInstance();
 	
-	public List<Event> getInvitations(int id, String status){
+	public List<Event> getInvitations(String email, String status){
 		String query = "SELECT  i.EventId, EventName, EventDate, EventLocation "
 				+ "FROM invitation i JOIN eventheader eh ON i.EventId = eh.EventId "
 				+ "JOIN eventdetails ed ON eh.EventId = ed.EventId "
-				+ "WHERE i.UserId = ? AND i.Status = ?";
+				+ "JOIN user u ON i.UserId = u.UserId "
+				+ "WHERE u.Email = ? AND i.Status = ?";
 		PreparedStatement ps = db.preparedStatment(query);
 		List<Event> invitationList = new ArrayList<Event>();
 		
 		
 		try {
-			ps.setInt(1, id);
+			ps.setString(1, email);
 			ps.setString(2, status);
 			ResultSet rs = ps.executeQuery();
 			
@@ -42,10 +43,11 @@ public class GuestDataAccess {
 	public boolean acceptInvitation(int eventId) {
 		String query = "UPDATE invitation "
 						+ "SET Status = 'Accepted' "
-						+ "WHERE EventId = ?";
+						+ "WHERE EventId = ? AND UserId = ?";
 		PreparedStatement ps = db.preparedStatment(query);
 		try {
 			ps.setInt(1, eventId);
+			ps.setInt(2, Session.getInstance().getLoggedInUser().getId());
 			
 			int rowsUpdated = ps.executeUpdate();
 			return rowsUpdated >0;

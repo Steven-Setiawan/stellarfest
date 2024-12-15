@@ -1,14 +1,11 @@
 package model;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 public class Event {
 	private int eventId;
 	private String eventName;
 	private String eventDate;
 	private String eventLocation;
-	private String organizerId;
+	private int organizerId;
 	private String eventDescription;
 	
 	public Event(int eventId, String eventName, String eventDate, String eventLocation) {
@@ -24,6 +21,14 @@ public class Event {
 		this.eventDate = eventDate;
 		this.eventLocation = eventLocation;
 		this.eventDescription = eventDescription;
+	}
+	
+	public Event(String eventName, String eventDate, String eventLocation, String eventDescription, int organizerId) {
+		this.eventName = eventName;
+		this.eventDate = eventDate;
+		this.eventLocation = eventLocation;
+		this.eventDescription = eventDescription;
+		this.organizerId = organizerId;
 	}
 
 	public int getEventId() {
@@ -42,11 +47,37 @@ public class Event {
 		return eventLocation;
 	}
 
-	public String getOrganizerId() {
+	public int getOrganizerId() {
 		return organizerId;
 	}
 
 	public String getEventDescription() {
 		return eventDescription;
 	}
+
+	public void setEventId(int eventId) {
+		this.eventId = eventId;
+	}
+
+	public void setEventName(String eventName) {
+		this.eventName = eventName;
+	}
+
+	public void setEventDate(String eventDate) {
+		this.eventDate = eventDate;
+	}
+
+	public void setEventLocation(String eventLocation) {
+		this.eventLocation = eventLocation;
+	}
+
+	public void setOrganizerId(int organizerId) {
+		this.organizerId = organizerId;
+	}
+
+	public void setEventDescription(String eventDescription) {
+		this.eventDescription = eventDescription;
+	}
+	
+	
 }
