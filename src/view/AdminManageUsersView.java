@@ -32,6 +32,7 @@ public class AdminManageUsersView extends BorderPane{
 	
 	
 	private void init() {
+		// inisialisasi komponen yang akan digunakan
 		ac = new AdminController();
 		nav = new AdminNav();
 		container = new VBox();
@@ -41,6 +42,7 @@ public class AdminManageUsersView extends BorderPane{
 	}
 
 	private void setLayout() {
+		// memasukkan komponen ke container yang ada, agar dapat ditampilkan
 		this.container.setSpacing(15);
 		this.container.getChildren().addAll(tableLbl, userTable);
 		this.setTop(nav);
@@ -48,6 +50,7 @@ public class AdminManageUsersView extends BorderPane{
 	}
 	
 	private void setTable() {
+		// inisialisasi kolom-kolom pada tabel
 		TableColumn<User, String> usernameColumn = new TableColumn<User, String>("Username");
 		usernameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
 		
@@ -62,7 +65,9 @@ public class AdminManageUsersView extends BorderPane{
 		actionCol.setCellFactory(param -> new TableCell<User, Void>(){
 			private final Button deleteBtn = new Button("Delete");
 			{
+				// handle click dari Delete Button
 				deleteBtn.setOnAction(event -> {
+					// mengeluarkan confirmation alert
 					Alert alert = new Alert(AlertType.CONFIRMATION);
 					alert.setTitle("Confrim???");
 					alert.setHeaderText(null);
@@ -78,6 +83,7 @@ public class AdminManageUsersView extends BorderPane{
 				
 			}
 			
+			// set button ke container
 			protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
@@ -95,6 +101,7 @@ public class AdminManageUsersView extends BorderPane{
 	}
 	
 	private void loadData() {
+		// mengambil data dan di isi ke table 
 		users.clear();
 		this.users = ac.getAllUsers();
 		ObservableList<User> userList = FXCollections.observableArrayList(this.users);
@@ -105,6 +112,7 @@ public class AdminManageUsersView extends BorderPane{
 		this.tableLbl.setStyle("-fx-font-size: 24px;");
 	}
 	
+	// handle delete
 	private void handleDelete(int userId) {
 		if(ac.deleteUser(userId)) {
 			Alert alert = new Alert(AlertType.INFORMATION);

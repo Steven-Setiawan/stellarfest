@@ -9,9 +9,10 @@ import view_controller.ViewController;
 
 public class VendorNav extends HBox implements EventHandler<ActionEvent>{
 
-private Button homeBtn, eventBtn, invitationBtn, profileBtn, logoutBtn, productBtn;
+	private Button homeBtn, eventBtn, invitationBtn, profileBtn, logoutBtn, productBtn;
 	
 	private void init() {
+		// inisialisasi komponen yang akan digunakan
 		homeBtn = new Button("Home");
 		eventBtn = new Button("Event");
 		invitationBtn = new Button("Invitation");
@@ -49,6 +50,7 @@ private Button homeBtn, eventBtn, invitationBtn, profileBtn, logoutBtn, productB
 		setStyle();
 	}
 
+	// Handle click button dari nav
 	@Override
 	public void handle(ActionEvent e) {
 		if(e.getSource() == this.homeBtn) {

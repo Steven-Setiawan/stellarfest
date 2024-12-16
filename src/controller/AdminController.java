@@ -8,6 +8,8 @@ import model.User;
 
 public class AdminController {
 
+	// berisi function untuk menghubungkan view dengan data access
+	
 	private AdminDataAccess ad;
 	
 	public AdminController() {

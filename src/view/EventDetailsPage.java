@@ -89,10 +89,12 @@ public class EventDetailsPage extends BorderPane{
 	}
 	
 	private void setStyle() {
+		// menambahkan style
 		this.navContainer.setStyle("-fx-background-color: #333; -fx-padding: 10px;");
 		this.backBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
 	}
 	
+	// load data ke field yang ada mengenai event
 	private void loadData() {
 		Event event = ec.viewEventDetails(eventId);
 		eventNameField.setText(event.getEventName());

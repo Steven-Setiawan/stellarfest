@@ -2,9 +2,11 @@ package view;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import controller.UserController;
 import javafx.scene.control.Alert;
@@ -13,7 +15,7 @@ import view_controller.ViewController;
 
 public class RegisterView extends VBox {
     private VBox container;
-    private Label lbl;
+    private Label lbl, text1;
     private TextField usernameTf;
     private TextField emailTf;
     private PasswordField passwordPf;
@@ -21,10 +23,15 @@ public class RegisterView extends VBox {
     private Button btn;
     private ViewController vc = ViewController.getInstance();
     private UserController uc = new UserController();
+    private Hyperlink loginBtn;
+    private HBox wrapper;
 
-    private void init() {
-        container = new VBox();
-
+    private void init() { // inisialisasi komponen yang akan digunakan
+        container = new VBox(10);
+        loginBtn = new Hyperlink("Login here");
+        text1 = new Label("Already have an Account? ");
+        wrapper = new HBox(5);
+        
         lbl = new Label("Register");
 
         usernameTf = new TextField();
@@ -42,10 +49,15 @@ public class RegisterView extends VBox {
         this.passwordPf.setPromptText("Password");
 
         btn.setOnAction(e -> handleRegister());
+        this.loginBtn.setOnAction(e -> {
+        	vc.navigateToLogin();
+        });
     }
 
     private void setLayout() {
-        this.container.getChildren().addAll(lbl, usernameTf, emailTf, passwordPf, roleComboBox, btn);
+    	// memasukkan komponen ke container yang ada, agar dapat ditampilkan
+    	this.wrapper.getChildren().addAll(text1, loginBtn);
+        this.container.getChildren().addAll(lbl, usernameTf, emailTf, passwordPf, roleComboBox, wrapper,btn);
         this.getChildren().add(this.container);
     }
 
@@ -53,13 +65,15 @@ public class RegisterView extends VBox {
         init();
         setLayout();
     }
-
+    
     private void handleRegister() {
+    	// mengambil data dari texfield, inputan user
         String username = usernameTf.getText();
         String email = emailTf.getText();
         String password = passwordPf.getText();
         String role = roleComboBox.getValue();
-
+        
+        // mulai tahap regis
         if (uc.checkRegisterInput(username, email, password)) {
         	if (uc.register(username, email, password, role)) {
                 showAlert("Registration Successful", "User has been registered successfully.", AlertType.INFORMATION);

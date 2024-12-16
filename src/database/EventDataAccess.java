@@ -17,6 +17,7 @@ public class EventDataAccess {
 	
 	private Database db = Database.getInstance();
 	
+	// ambil data guest berdasarkan event id yang di ikuti
 	public List<User> getGuestByTransactionId(int eventId){
 		List<User> guestList = new ArrayList<User>();
 		String query = "SELECT u.UserId, Username, Email FROM user u "
@@ -27,6 +28,7 @@ public class EventDataAccess {
 		try {
 			ps.setInt(1, eventId);
 			ResultSet rs = ps.executeQuery();
+			// jika data nya ada, objek guest akan dibuat dan dimasukkan ke dalam list
 			while(rs.next()) {
 				User user = new Guest(rs.getInt("UserId"), rs.getString("Username"), rs.getString("Email"));
 				
@@ -39,6 +41,7 @@ public class EventDataAccess {
 		return guestList;
 	}
 	
+	// ambil data vendor berdasarkan event id yang di ikuti
 	public List<User> getVendorByTransactionId(int eventId){
 		List<User> vendorList = new ArrayList<User>();
 		
@@ -53,7 +56,7 @@ public class EventDataAccess {
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				User user = new Vendor(rs.getInt("UserId"), rs.getString("Username"), rs.getString("Email"));
-				
+				// jika data nya ada, objek guest akan dibuat dan dimasukkan ke dalam list
 				vendorList.add(user);
 			}
 		} catch (SQLException e) {
@@ -63,6 +66,7 @@ public class EventDataAccess {
 		return vendorList;
 	}
 	
+	// mengambil data event details
 	public Event viewEventDetails(int eventId) {
 		String query = "SELECT * FROM eventdetails WHERE EventId = ?";
 		PreparedStatement ps = db.preparedStatment(query);

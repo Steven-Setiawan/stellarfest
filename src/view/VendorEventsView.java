@@ -30,6 +30,7 @@ public class VendorEventsView extends BorderPane{
 	private User activeUser = Session.getInstance().getLoggedInUser();
 	
 	private void init() {
+		// inisialisasi komponen yang akan digunakan
 		nav = new VendorNav();
 		wrapper = new VBox(15);
 		eventTable = new TableView<Event>();
@@ -37,11 +38,13 @@ public class VendorEventsView extends BorderPane{
 	}
 	
 	private void setLayout() {
+		// memasukkan komponen ke container yang ada, agar dapat ditampilkan
 		this.wrapper.getChildren().addAll(nav, eventTable);
 		this.setTop(wrapper);
 	}
 	
 	private void setTable() {
+		// inisialisasi kolom-kolom pada tabel
 		TableColumn<Event, String> eventNamecol = new TableColumn<Event, String>("Event Name");
 		eventNamecol.setCellValueFactory(new PropertyValueFactory<Event, String>("eventName"));
 		eventNamecol.setPrefWidth(200);
@@ -80,6 +83,7 @@ public class VendorEventsView extends BorderPane{
 		this.eventTable.getColumns().addAll(eventNamecol, eventDatecol, eventLocationcol, actionCol);
 	}
 	
+	// ambil data untuk table
 	public void loadData() {
 		this.events.clear();
 		this.events = controller.getAcceptedEvent(activeUser.getEmail());

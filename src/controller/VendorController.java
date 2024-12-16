@@ -12,6 +12,8 @@ public class VendorController {
 
 	private VendorDataAccess vd;
 	
+	// berisi function unutk validasi dan sisanya untuk menghubungkan view dengan data access
+	
 	public VendorController() {
 		vd = new VendorDataAccess();
 	}
@@ -24,7 +26,9 @@ public class VendorController {
 		return vd.manageVendor(productName, productDescription);
 	}
 	
+	// validasi inputan produk baru
 	public boolean checkManageVendorInput(String productName, String productDescription) {
+		// jika ada field empty
 		if(productName.isEmpty() || productDescription.isEmpty()) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Failed");
@@ -33,6 +37,7 @@ public class VendorController {
 	        alert.showAndWait();
 	        return false;
 		}else if(productDescription.length() > 200){
+			// deskripsi produk lebih dari 200 kata
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Failed");
 	        alert.setHeaderText(null);

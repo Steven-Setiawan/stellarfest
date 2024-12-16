@@ -4,6 +4,8 @@ import database.EventDataAccess;
 import model.Event;
 
 public class EventController {
+	
+	// berisi function untuk menghubungkan view dengan data access
 
 	private EventDataAccess ed;
 	

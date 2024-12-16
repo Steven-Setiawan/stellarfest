@@ -14,6 +14,8 @@ import java.util.List;
 
 public class EventOrganizerController {
 
+	// berisi function unutk validasi dan sisanya untuk menghubungkan view dengan data access
+	
     private EventDataAccess eventDataAccess;
 
     public EventOrganizerController() {

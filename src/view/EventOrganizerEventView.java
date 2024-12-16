@@ -25,6 +25,7 @@ public class EventOrganizerEventView extends VBox {
     private EventOrganizerController eventOrganizerController = new EventOrganizerController();
 
     public EventOrganizerEventView() {
+    	
     	this.navBar = new EONavbar();
         showEventLabel = new Label("Show Events");
         showEventLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 10px;");

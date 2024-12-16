@@ -36,6 +36,7 @@ public class ProfileView extends BorderPane {
     }
 
     private void init() {
+    	// inisialisasi komponen yang akan digunakan
         User loggedInUser = Session.getInstance().getLoggedInUser();
 
         navContainer = new HBox(10);
@@ -56,6 +57,7 @@ public class ProfileView extends BorderPane {
     }
 
     private void setEventHandlers() {
+    	// setting event handler
         this.submitButton.setOnAction(event -> handleSubmit());
         this.backBtn.setOnAction(event -> {
         	vc.navigateBack();
@@ -63,11 +65,13 @@ public class ProfileView extends BorderPane {
     }
     
 	private void setStyle() {
+		// memberikan sedikit style dengan inline-style
 		this.navContainer.setStyle("-fx-background-color: #333; -fx-padding: 10px;");
 		this.backBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
 	}
 
     private void setLayout() {
+    	// memasukkan komponen ke container yang ada, agar dapat ditampilkan
         this.container.getChildren().addAll(
             usernameLabel, usernameField,
             emailLabel, emailField,
@@ -82,22 +86,29 @@ public class ProfileView extends BorderPane {
         this.setLeft(container);
     }
 
+    // handle submit button
     private void handleSubmit() {
+    	// mengambil inputan user
         String newUsername = usernameField.getText().trim();
         String newEmail = emailField.getText().trim();
         String oldPassword = oldPasswordField.getText().trim();
         String newPassword = newPasswordField.getText().trim();
 
+        
+        // mulai proses update profile
         if(userController.checkChangeProfileInput(newUsername, newEmail, oldPassword, newPassword)) {
         	if (userController.changeProfile(newEmail, newUsername, oldPassword, newPassword)) {
+        		// jika proses sukses
                 showAlert(AlertType.INFORMATION, "Profile updated successfully.");
                 vc.navigateToProfile();
             } else {
+            	// jika gagal
                 showAlert(AlertType.ERROR, "Failed to update profile. Please try again.");
             }
         }   
     }
 
+    // fucntion untuk meberikan alert;
     private void showAlert(AlertType alertType, String message) {
         Alert alert = new Alert(alertType);
         alert.setHeaderText(message);

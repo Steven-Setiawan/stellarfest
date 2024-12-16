@@ -9,6 +9,7 @@ public class Main extends Application{
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		// set up view pertama kali untuk di tampilkan
 		AppView appView = new AppView(primaryStage);
 		ViewController viewController = ViewController.getInstance();
 		viewController.initialize(primaryStage, appView);

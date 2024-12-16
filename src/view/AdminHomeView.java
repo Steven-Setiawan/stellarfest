@@ -6,6 +6,8 @@ import javafx.scene.layout.BorderPane;
 
 public class AdminHomeView extends BorderPane{
 	
+	// Home view dari admin
+	
 	private AdminNav nav;
 	private Label welcomeLbl;
 	

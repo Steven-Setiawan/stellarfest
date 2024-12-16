@@ -9,6 +9,8 @@ import view_controller.ViewController;
 
 public class AdminNav extends HBox implements EventHandler<ActionEvent>{
 	
+	// NAVBAR UNTUK SELURUH VIE DARI ADMIN
+	
 	private Button homeBtn, eventBtn, usersBtn, profileBtn, logoutBtn;
 	
 	private void init() {

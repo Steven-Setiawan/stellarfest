@@ -32,6 +32,7 @@ public class VendorInvitationView extends BorderPane{
 	private User activeUser = Session.getInstance().getLoggedInUser();
 	
 	private void init() {
+		// inisialisasi komponen yang akan digunakan
 		nav = new VendorNav();
 		wrapper = new VBox(15);
 		eventTable = new TableView<Event>();
@@ -44,6 +45,7 @@ public class VendorInvitationView extends BorderPane{
 	}
 	
 	private void setTable() {
+		// inisialisasi kolom-kolom pada tabel
 		TableColumn<Event, String> eventNamecol = new TableColumn<Event, String>("Event Name");
 		eventNamecol.setCellValueFactory(new PropertyValueFactory<Event, String>("eventName"));
 		eventNamecol.setPrefWidth(200);
@@ -89,12 +91,14 @@ public class VendorInvitationView extends BorderPane{
 	}
 	
 	public void loadData() {
+//		mengambil data untuk di isi ke tabel
 		this.events.clear();
 		this.events = controller.getInvitations(activeUser.getEmail());
 		ObservableList<Event> eventList = FXCollections.observableArrayList(this.events);
 		this.eventTable.setItems(eventList);
 	}
 	
+	// handle click dari button accept
 	private void handleAcceptInvitation(int eventId) {
 		boolean temp = controller.acceptInvitation(eventId);
 		if(temp) {
@@ -108,6 +112,7 @@ public class VendorInvitationView extends BorderPane{
 	        alert.showAndWait();
 	        loadData();
 		}else {
+			// show error message if failed
 			Alert alert = new Alert(AlertType.ERROR);
 	        alert.setTitle("Failed");
 	        alert.setHeaderText(null);

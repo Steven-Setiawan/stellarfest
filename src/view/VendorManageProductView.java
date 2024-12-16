@@ -33,6 +33,7 @@ public class VendorManageProductView extends BorderPane{
 	private VendorController controller;
 	
 	private void init() {
+		// inisialisasi komponen yang akan digunakan
 		nav = new VendorNav();
 		wrapper = new VBox(20);
 		formContainer = new GridPane();
@@ -67,6 +68,7 @@ public class VendorManageProductView extends BorderPane{
 	}
 	
 	private void setLayout() {
+		// memasukkan komponen ke container yang ada, agar dapat ditampilkan
 		this.formContainer.add(productNameLbl, 0, 1);
 		this.formContainer.add(productNameField, 1, 1);
 		this.formContainer.add(productDescriptionLbl, 0, 2);
@@ -78,6 +80,7 @@ public class VendorManageProductView extends BorderPane{
 		this.setTop(wrapper);
 	}
 	
+	// setting table dengan membuat kolom
 	private void setTable() {
 		TableColumn<VendorProduct, String> productNameColumn = new TableColumn<VendorProduct, String>("Product Name");
 		productNameColumn.setCellValueFactory(new PropertyValueFactory<VendorProduct, String>("productName"));
@@ -90,18 +93,21 @@ public class VendorManageProductView extends BorderPane{
 		this.productTable.getColumns().addAll(productNameColumn, productDescriptionColumn);
 	}
 	
+	// mengambil data dan di isi ke table 
 	private void loadData() {
 		this.products.clear();
 		this.products = controller.getAllProducts(Session.getInstance().getLoggedInUser().getId());
 		ObservableList<VendorProduct> productList = FXCollections.observableArrayList(this.products);
 		this.productTable.setItems(productList);
 	}
-		
+	
+	// function untuk menghandle button Add product
 	private void handleAdd() {
 		String productName = this.productNameField.getText().toString();
 		String productDescription = this.productDescriptionField.getText().toString();
 		if(controller.checkManageVendorInput(productName, productDescription)) {
 			if(controller.manageVendor(productName, productDescription)) {
+				// show success message
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Success");
 		        alert.setHeaderText(null);
@@ -109,6 +115,7 @@ public class VendorManageProductView extends BorderPane{
 				loadData();
 				alert.showAndWait();
 			}else {
+				// show error message
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Failed");
 		        alert.setHeaderText(null);

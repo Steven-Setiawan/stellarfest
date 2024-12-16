@@ -87,6 +87,7 @@ public class AdminEventDetailsView extends BorderPane{
 		});
 	}
 	
+	// memasukkan komponen ke container yang ada, agar dapat ditampilkan
 	private void setLayout() {
 		// put each field to HBox container
 		this.navContainer.getChildren().addAll(backBtn);
@@ -101,8 +102,8 @@ public class AdminEventDetailsView extends BorderPane{
 		container.add(eventLocationField, 1, 2); // Row 2, Column 1
 		container.add(eventDescriptionLbl, 0, 3); // Row 3, Column 0
 		container.add(eventDescriptionField, 1, 3); // Row 3, Column 1
-		container.add(eventOrganizerLbl, 0, 4);
-		container.add(eventOrganizerField, 1, 4);
+		container.add(eventOrganizerLbl, 0, 4); // Row 4, Column 0
+		container.add(eventOrganizerField, 1, 4); // Row 4, Column 1
 		
 		this.wrapper.getChildren().addAll(navContainer, container, userTable);
 		this.setTop(wrapper);
@@ -113,6 +114,7 @@ public class AdminEventDetailsView extends BorderPane{
 		this.backBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
 	}
 	
+	// inisialisasi kolom-kolom pada tabel
 	private void setTable() {
 		TableColumn<User, String> usernameColumn = new TableColumn<User, String>("Username");
 		usernameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
@@ -126,6 +128,7 @@ public class AdminEventDetailsView extends BorderPane{
 		this.userTable.getColumns().addAll(usernameColumn, emailColumn, roleColumn);
 	}
 	
+	// mengambil data dan di isi ke table 
 	private void loadTableData() {
 		ObservableList<User> userList;
 		this.users.clear();
@@ -135,6 +138,7 @@ public class AdminEventDetailsView extends BorderPane{
 		this.userTable.setItems(userList);
 	}
 	
+	// isi data event description ke textArea
 	private void loadEventDesc() {
 		Event event = ac.viewEventDetails(eventId);
 		User eventOrganizer = ac.getOrganizerDetail(event.getOrganizerId());

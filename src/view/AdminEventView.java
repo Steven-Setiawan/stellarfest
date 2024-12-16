@@ -33,6 +33,7 @@ public class AdminEventView extends BorderPane {
 	
 	
 	private void init() {
+		// inisialisasi komponen yang akan digunakan
 		ac = new AdminController();
 		nav = new AdminNav();
 		container = new VBox();
@@ -42,6 +43,7 @@ public class AdminEventView extends BorderPane {
 	}
 	
 	private void setLayout() {
+		// memasukkan komponen ke container yang ada, agar dapat ditampilkan
 		this.container.setSpacing(15);
 		this.container.getChildren().addAll(tableLbl, eventTable);
 		this.setTop(nav);
@@ -49,6 +51,7 @@ public class AdminEventView extends BorderPane {
 	}
 	
 	private void setTable() {
+		// inisialisasi kolom-kolom pada tabel
 		TableColumn<Event, String> eventNamecol = new TableColumn<Event, String>("Event Name");
 		eventNamecol.setCellValueFactory(new PropertyValueFactory<Event, String>("eventName"));
 		eventNamecol.setPrefWidth(200);
@@ -104,6 +107,7 @@ public class AdminEventView extends BorderPane {
 	}
 	
 	private void loadData() {
+		// mengambil data dan di isi ke table 
 		events.clear();
 		this.events = ac.getAllEvents();
 		ObservableList<Event> inivitationList = FXCollections.observableArrayList(this.events);
@@ -114,8 +118,10 @@ public class AdminEventView extends BorderPane {
 		this.tableLbl.setStyle("-fx-font-size: 24px;");
 	}
 	
+	// handle delete 
 	private void handleDelete(int eventId) {
 		if(ac.deleteEvent(eventId)) {
+			// success
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Success");
 	        alert.setHeaderText(null);
@@ -123,6 +129,7 @@ public class AdminEventView extends BorderPane {
 			loadData();
 			alert.showAndWait();
 		}else {
+			// failed
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Failed");
 	        alert.setHeaderText(null);

@@ -7,6 +7,8 @@ import model.Event;
 
 public class GuestController {
 
+	// berisi function unutk validasi dan sisanya untuk menghubungkan view dengan data access
+	
 	private GuestDataAccess da;
 	
 	public GuestController() {

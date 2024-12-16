@@ -15,6 +15,7 @@ public class GuestHomeView extends BorderPane implements EventHandler<ActionEven
 	private ViewController vc;
 	
 	private void init() {
+		// inisialisasi komponen yang akan digunakan
 		vc = ViewController.getInstance();
 		navContainer = new HBox(10);
 		invitationBtn = new Button("Invitation");
@@ -27,18 +28,21 @@ public class GuestHomeView extends BorderPane implements EventHandler<ActionEven
 	}
 	
 	private void setLayout() {
+		// memasukkan komponen ke container yang ada, agar dapat ditampilkan
 		this.navContainer.getChildren().addAll(invitationBtn, profileBtn, logoutBtn);
 		this.setTop(navContainer);
 		this.navContainer.setAlignment(Pos.TOP_LEFT);
 	}
 	
 	private void setStyle() {
+		// menambahkan style
 		this.navContainer.setStyle("-fx-background-color: #333; -fx-padding: 10px;");
 		this.invitationBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
 		this.profileBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
 		this.logoutBtn.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
 	}
 
+	// handle nav click
 	@Override
 	public void handle(ActionEvent e) {
 		if(e.getSource() == this.logoutBtn) {

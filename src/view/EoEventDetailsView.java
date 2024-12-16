@@ -83,6 +83,7 @@ public class EoEventDetailsView extends BorderPane{
 	}
 	
 	private void setLayout() {
+		// memasukkan komponen ke container yang ada, agar dapat ditampilkan
 		// put each field to HBox container
 		this.navContainer.getChildren().addAll(backBtn);
 		this.navContainer.setAlignment(Pos.TOP_LEFT);
@@ -119,6 +120,7 @@ public class EoEventDetailsView extends BorderPane{
 		this.userTable.getColumns().addAll(usernameColumn, emailColumn, roleColumn);
 	}
 	
+	// load data guest dan vendor ke table 
 	private void loadTableData() {
 		ObservableList<User> userList;
 		this.users.clear();
@@ -128,6 +130,7 @@ public class EoEventDetailsView extends BorderPane{
 		this.userTable.setItems(userList);
 	}
 	
+	// loada data event description ke field yang telah di inisialisasikan di awal
 	private void loadEventDesc() {
 		Event event = ec.viewEventDetails(eventId);
 		eventNameField.setText(event.getEventName());

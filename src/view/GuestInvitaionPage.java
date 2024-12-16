@@ -40,6 +40,7 @@ public class GuestInvitaionPage extends BorderPane implements EventHandler<Actio
 	private ViewController vc;
 	
 	private void init() {
+		// inisialisasi komponen yang akan digunakan
 		vc = ViewController.getInstance();
 		
 		events = new Vector<Event>();
@@ -66,6 +67,7 @@ public class GuestInvitaionPage extends BorderPane implements EventHandler<Actio
 	}
 	
 	private void setLayout() {
+		// memasukkan komponen ke container yang ada, agar dapat ditampilkan
 		this.vBoxContainer.getChildren().addAll(hBoxContainer ,eventTable);
 		this.vBoxContainer.setAlignment(Pos.CENTER);
 		
@@ -79,6 +81,7 @@ public class GuestInvitaionPage extends BorderPane implements EventHandler<Actio
 	}
 	
 	private void setStyle() {
+		// menambahkan style
 		this.navContainer.setStyle("-fx-background-color: #333; -fx-padding: 10px;");
 		this.backBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
 		this.profileBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
@@ -86,6 +89,7 @@ public class GuestInvitaionPage extends BorderPane implements EventHandler<Actio
 	}
 	
 	private void setTable() {
+		// inisialisasi kolom-kolom pada tabel
 		TableColumn<Event, String> eventNamecol = new TableColumn<Event, String>("Event Name");
 		eventNamecol.setCellValueFactory(new PropertyValueFactory<Event, String>("eventName"));
 		eventNamecol.setPrefWidth(200);
@@ -102,11 +106,15 @@ public class GuestInvitaionPage extends BorderPane implements EventHandler<Actio
 			private final Button detailBtn = new Button("Details");
 			private final Button accBtn = new Button("Accept");
 			{
+				// setting event handler untuk button-button action
+				
+				// button view details
 				detailBtn.setOnAction(event -> {
 					Event currEvent = getTableView().getItems().get(getIndex());
 					vc.navigateToEventDetails(currEvent.getEventId());
 				});
 				
+				// button accept invitation
 				accBtn.setOnAction(event -> {
 					Event currEvent = getTableView().getItems().get(getIndex());
 					handleAcceptInvitation(currEvent.getEventId());
@@ -119,9 +127,12 @@ public class GuestInvitaionPage extends BorderPane implements EventHandler<Actio
                     setGraphic(null);
                 } else {
                     HBox hbox = new HBox();
+                    // validasi invitation accepted atau pending
                     if(filterOptions.getValue().equalsIgnoreCase("pending")) {
+                    	// jika blm accepted, maka akan ada tombol accept dan view details
                     	hbox.getChildren().addAll(detailBtn, accBtn);
                     }else if(filterOptions.getValue().equalsIgnoreCase("Accepted")) {
+                    	// jika sudah accepted maka hanya ada button view details
                     	hbox.getChildren().addAll(detailBtn);
                     }
                     hbox.setSpacing(10);
@@ -134,6 +145,7 @@ public class GuestInvitaionPage extends BorderPane implements EventHandler<Actio
 		this.eventTable.getColumns().addAll(eventNamecol, eventDatecol, eventLocationcol, actionCol);
 	}
 	
+	// mengambil data dan di isi ke table 
 	private void setTableData(String status) {
 		this.events.clear();
 		this.events = gc.getInvitations(activeUser.getEmail(), status);
@@ -141,10 +153,11 @@ public class GuestInvitaionPage extends BorderPane implements EventHandler<Actio
 		this.eventTable.setItems(inivitationList);
 	}
 	
+	// handle accept invtation button yang ada di kolom action
 	private void handleAcceptInvitation(int eventId) {
 		boolean temp = gc.acceptInvitation(eventId);
 		if(temp) {
-			// create success message
+			// create success message jika operasi sukses
 			Alert alert = new Alert(AlertType.INFORMATION);
 	        alert.setTitle("Success");
 	        alert.setHeaderText(null);
@@ -155,6 +168,7 @@ public class GuestInvitaionPage extends BorderPane implements EventHandler<Actio
 	        filterOptions.setValue("Accepted");
 	        setTableData(filterOptions.getValue().toString());
 		}else {
+			// alert jika gagal
 			Alert alert = new Alert(AlertType.ERROR);
 	        alert.setTitle("Failed");
 	        alert.setHeaderText(null);
@@ -162,6 +176,7 @@ public class GuestInvitaionPage extends BorderPane implements EventHandler<Actio
 		}
 	}
 	
+	// handle nav click
 	@Override
 	public void handle(ActionEvent e) {
 		if(e.getSource() == this.logoutBtn) {

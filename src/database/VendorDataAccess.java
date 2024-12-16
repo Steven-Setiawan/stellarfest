@@ -17,6 +17,7 @@ public class VendorDataAccess {
 		// TODO Auto-generated constructor stub
 	}
 	
+	// mengambil semua data produk berdasrkan vendor id
 	public List<VendorProduct> getAllProducts(int vendorId){
 		List<VendorProduct> products = new ArrayList<VendorProduct>();
 		String query = "SELECT * FROM vendorproduct "
@@ -25,10 +26,12 @@ public class VendorDataAccess {
 		PreparedStatement ps = db.preparedStatment(query);
 		
 		try {
+			// set data ke preparedstatment
 			ps.setInt(1, vendorId);
 			
 			ResultSet rs = ps.executeQuery();
 			
+			// selama rs.next = true, objek produk akan dibuat dan dimasukkan kedalam list dan direturn
 			while(rs.next()) {
 				VendorProduct product = new VendorProduct(vendorId, rs.getString("ProductName"), rs.getString("ProductDescription"));
 			
@@ -41,6 +44,7 @@ public class VendorDataAccess {
 		return products;
 	}
 	
+	// menambhakna produk baru ke table vendorproduct pada db
 	public boolean manageVendor(String productName, String productDescription) {
 		String query = "INSERT INTO vendorproduct VALUES("
 						+ "NULL, ?, ?, ?)";
@@ -48,11 +52,13 @@ public class VendorDataAccess {
 		PreparedStatement ps = db.preparedStatment(query);
 		
 		try {
+			// set data ke preparedstatment
 			ps.setString(1, productName);
 			ps.setString(2, productDescription);
 			ps.setInt(3, Session.getInstance().getLoggedInUser().getId());
 			
 			int rowUpdated = ps.executeUpdate();
+			// jika rows updated > 0 maka berhasi
 			return rowUpdated > 0;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -61,6 +67,7 @@ public class VendorDataAccess {
 		return false;
 	}
 	
+	// mendapatkan data event yang sudah di accpet berdasarkan email user
 	public List<Event> getAcceptedEvent(String email){
 		String query = "SELECT  i.EventId, EventName, EventDate, EventLocation "
 				+ "FROM invitation i JOIN eventheader eh ON i.EventId = eh.EventId "
@@ -72,10 +79,12 @@ public class VendorDataAccess {
 		
 		
 		try {
+			// set data ke preparedstatment
 			ps.setString(1, email);
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
+				// selama rs.next = true, objek event akan dibuat dan dimasukkan kedalam list dan direturn
 				Event event = new Event(rs.getInt("EventId"), rs.getString("EventName"),
 						rs.getString("EventDate"), rs.getString("EventLocation"));
 				

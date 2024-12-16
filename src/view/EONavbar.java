@@ -8,6 +8,8 @@ public class EONavbar extends HBox{
 
 	private Button homeButton, profileButton, eventButton, logoutButton;
 	
+	//SET UP NAVBAR UNTUK seleruh EVENT ORGANIZER VIEW
+	
 	private void setUpNavBar() {
         homeButton = new Button("Home");
         profileButton = new Button("Profile");

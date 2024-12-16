@@ -8,6 +8,8 @@ import view_controller.ViewController;
 import database.Session;
 
 public class UserController {
+	
+	// berisi function unutk validasi dan sisanya untuk menghubungkan view dengan data access
 
     private UserDataAccess userDataAccess;
 

@@ -1,6 +1,5 @@
 package view;
 
-import controller.UserController;
 import database.Session;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -11,7 +10,6 @@ import view_controller.ViewController;
 public class EventOrganizerHomeView extends VBox {
     
     private ViewController vc = ViewController.getInstance();
-    private UserController uc = new UserController();
     private Text welcomeText;
     private Button editProfileBtn;
     private Button createEventBtn;
@@ -24,6 +22,7 @@ public class EventOrganizerHomeView extends VBox {
     }
     
     private void init() {
+    	// inisialisasi komponen yang akan digunakan
         welcomeText = new Text();
         editProfileBtn = new Button("Edit Profile");
         createEventBtn = new Button("Create Event");
@@ -35,6 +34,7 @@ public class EventOrganizerHomeView extends VBox {
         }
     }
     
+    // set event handler dari button yang ada
     private void setEvent() {
         editProfileBtn.setOnAction(e -> vc.navigateToProfile());
         createEventBtn.setOnAction(e -> vc.navigateToEventOrganizerCreateEvent());
@@ -42,6 +42,7 @@ public class EventOrganizerHomeView extends VBox {
     }
     
     private void setLayout() {
+    	// memasukkan komponen ke container yang ada, agar dapat ditampilkan
         this.getChildren().addAll(welcomeText, editProfileBtn, createEventBtn, showEventBtn);
     }
 }

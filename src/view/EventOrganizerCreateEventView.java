@@ -47,6 +47,7 @@ public class EventOrganizerCreateEventView extends VBox {
     }
     
     private void init() {
+    	// inisialisasi komponen yang akan digunakan
     	this.navBar = new EONavbar();
         createEventLabel = new Label("Create Event");
 
@@ -73,6 +74,7 @@ public class EventOrganizerCreateEventView extends VBox {
     }
     
     private void setLayout() {
+    	// memasukkan komponen ke container yang ada, agar dapat ditampilkan
         this.getChildren().addAll(navBar, createEventLabel, createForm(), userTable, submitButton);
         this.setSpacing(15);
     }
@@ -102,6 +104,7 @@ public class EventOrganizerCreateEventView extends VBox {
         return form;
     }
 
+    // set up table
     private void setTable() {
         TableColumn<User, String> usernameColumn = new TableColumn<>("Username");
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
@@ -164,6 +167,7 @@ public class EventOrganizerCreateEventView extends VBox {
         this.userTable.setItems(listUser);
     }
 
+    // handle submit button
     private void handleSubmit() {
         String eventName = eventNameTf.getText().trim();
         LocalDate eventDate = eventDateDp.getValue();

@@ -10,6 +10,8 @@ import java.sql.Statement;
 
 public class Database {
 
+	// Class databse penghubung ke db menggunakan prinsip design pattern singleton
+	
 	public static Database instance;
 	
 	public final String USERNAME = "root";

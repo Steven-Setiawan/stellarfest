@@ -34,6 +34,9 @@ public class ViewController {
 
     private ViewController() {
     }
+    
+    // View Controller digunakan untuk berpindah antar page
+    // View Controller dibuat menggunakan design pattern singleton
 
     public static ViewController getInstance() {
         if (instance == null) {
@@ -42,6 +45,7 @@ public class ViewController {
         return instance;
     }
 
+    // inisialisasi pertama dari appview, stage, dan stack
     public void initialize(Stage stage, AppView appView) {
         this.stage = stage;
         this.appView = appView;
@@ -49,6 +53,7 @@ public class ViewController {
         this.titleStack = new Stack<>();
     }
     
+    // navigasi untuk back button atau ke halaman sebelumnya menggunakan implementasi stack
     public void navigateBack() {
         if (!viewStack.isEmpty()) {
             viewStack.pop();
@@ -59,6 +64,7 @@ public class ViewController {
         }
     }
     
+    // fungsi untuk navigasi antar page 
     public void navigateToView(Region view, String title) {
     	this.appView.setContent(view);
     	this.stage.setTitle(title);

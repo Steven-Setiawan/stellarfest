@@ -7,6 +7,8 @@ import javafx.stage.Stage;
 
 public class AppView {
 	
+	// Inisiasi View pertama kali untuk menampung view yang lain
+	
 	private BorderPane bp;
 	
 	private void init() {
@@ -17,7 +19,6 @@ public class AppView {
 		init();
 		
 		Scene scene = new Scene(bp, 900, 600);
-//		scene.getStylesheets().add(getClass().getResource("/style/style.css").toExternalForm());
 		stage.setScene(scene);
 	}
 	

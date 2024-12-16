@@ -5,6 +5,8 @@ import model.User;
 public class Session {
     private static Session instance;
     
+    // class SESSION digunakan untuk menyimpan data user yang sedang login untuk saat ini
+    
     private User loggedInUser;
     
     private Session() {}

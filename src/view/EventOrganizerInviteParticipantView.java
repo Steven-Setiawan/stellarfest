@@ -35,6 +35,7 @@ public class EventOrganizerInviteParticipantView extends BorderPane{
 	private List<User> guests, vendors;
 
 	private void init() {
+		// inisialisasi komponen yang akan digunakan
 		tableContainer = new HBox(60);
 		vendorTable = new TableView<User>();
 		guestTable = new TableView<User>();
@@ -64,6 +65,7 @@ public class EventOrganizerInviteParticipantView extends BorderPane{
 	}
 	
 	private void setLayout() {
+		// memasukkan komponen ke container yang ada, agar dapat ditampilkan
 		this.wrapper.getChildren().addAll(backbtn, title, tableContainer, addBtn);
 		this.tableContainer.getChildren().addAll(guestContainer, vendorContainer);
 		this.guestContainer.getChildren().addAll(guestLbl, guestTable);
@@ -71,6 +73,7 @@ public class EventOrganizerInviteParticipantView extends BorderPane{
 		this.setTop(wrapper);
 	}
 	
+	// set table 
 	private void setTable() {
 		setGuestTable();
 		setVendorTable();
@@ -78,6 +81,7 @@ public class EventOrganizerInviteParticipantView extends BorderPane{
 		loadVendorData();
 	}
 	
+	// set kolom untuk guest table
 	private void setGuestTable() {
 		TableColumn<User, String> usernameColumn = new TableColumn<>("Username");
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
@@ -125,6 +129,7 @@ public class EventOrganizerInviteParticipantView extends BorderPane{
         guestTable.getColumns().addAll(usernameColumn, emailColumn, inviteColumn);
 	}
 	
+	// set kolom untuk vendor table
 	private void setVendorTable() {
 		TableColumn<User, String> usernameColumn = new TableColumn<>("Username");
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
@@ -172,6 +177,7 @@ public class EventOrganizerInviteParticipantView extends BorderPane{
         vendorTable.getColumns().addAll(usernameColumn, emailColumn, inviteColumn);
 	}
 	
+	// load data guest untuk guestTable
 	private void loadGuestData() {
 		guests.clear();
 		guests = ec.getGuests(eventId);
@@ -179,6 +185,7 @@ public class EventOrganizerInviteParticipantView extends BorderPane{
 		this.guestTable.setItems(guestList);
 	}
 	
+	// loada data vendor untuk vendorTable
 	private void loadVendorData() {
 		vendors.clear();
 		vendors = ec.getVendors(eventId);
@@ -186,6 +193,7 @@ public class EventOrganizerInviteParticipantView extends BorderPane{
 		this.vendorTable.setItems(vendorList);
 	}
 	
+	// handle add button
 	private void handleAdd() {
 		for (User invitedUser : invitedUsers) {
             ec.createInvitation(eventId, invitedUser, "Pending");

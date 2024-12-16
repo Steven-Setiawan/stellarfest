@@ -21,6 +21,7 @@ public class AdminDataAccess {
 		
 	}
 	
+	// delete event
 	public boolean deleteEvent(int eventId) {
 		String query = "DELETE FROM eventheader "
 				+ "WHERE EventId = ?";
@@ -28,7 +29,7 @@ public class AdminDataAccess {
 		
 		try {
 			ps.setInt(1, eventId);
-			
+			// jika rows updated > 0 maka berhasi;
 			int rowsUpdated = ps.executeUpdate();
 			return rowsUpdated > 0;
 		} catch (SQLException e) {
@@ -46,6 +47,7 @@ public class AdminDataAccess {
 		try {
 			ps.setInt(1, userId);
 			
+			// jika rows updated > 0 maka berhasi;
 			int rowsUpdated = ps.executeUpdate();
 			return rowsUpdated > 0;
 		} catch (SQLException e) {
@@ -55,6 +57,7 @@ public class AdminDataAccess {
 		return false;
 	}
 	
+	// ambil semua data event detail berdasarkan event id
 	public Event viewEventDetails(int eventId) {
 		String query = "SELECT EventName, EventDate, EventLocation, EventDescription, EventOrganizerId FROM eventdetails ed"
 					+ " JOIN eventheader eh ON ed.EventId = eh.EventId"
